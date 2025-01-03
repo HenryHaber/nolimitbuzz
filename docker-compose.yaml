@@ -2,7 +2,10 @@ version: '3.3'
 
 services:
   wordpress:
-    image: wordpress:latest
+    # Build from your Dockerfile
+    build:
+      context: .  # Assuming your Dockerfile is in the same directory as docker-compose.yaml
+      dockerfile: Dockerfile # Or the name of your Dockerfile if it's different
     ports:
       - "8080:80"
     environment:
@@ -10,9 +13,9 @@ services:
       WORDPRESS_DB_USER: user
       WORDPRESS_DB_PASSWORD: password
       WORDPRESS_DB_NAME: wordpress
-      WORDPRESS_DEBUG: enable
     volumes:
-      - ./wordpress_data:/var/www/html
+      - ./wordpress_data:/var/www/html   
+
 
   db:
     image: mysql:5.7
@@ -35,3 +38,4 @@ services:
 volumes:
   wordpress_data: {}
   db_data: {}
+
