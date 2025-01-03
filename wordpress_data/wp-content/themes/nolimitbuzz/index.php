@@ -43,24 +43,31 @@ get_header();
                 $profile_picture = get_field('profile_picture');
 
                 // Build the URL for the /profile page
-                $profile_url = home_url('/profile') . '?member=' . get_the_ID();
+                $profile_url = home_url('/profile') . '?member=' . get_the_title();
                 ?>
                 <div class="team-member">
-                    <a href="<?php echo esc_url($profile_url); ?>" class="team-member-link">
-                        <?php 
-                        // Display profile picture if available
-                        if ($profile_picture) {
-                            echo '<div class="profile-picture">';
-                            echo '<img src="' . esc_url($profile_picture['url']) . '" alt="' . esc_attr($profile_picture['alt']) .'">';
-                            echo '</div>';
-                        }
-                        ?>
-                        <span class="team-member-name"><?php the_title(); ?></span>
-                        <?php if ($position) : ?>
-                            <p><?php echo esc_html($position); ?></p>
-                        <?php endif; ?>
-                    </a>
-                </div>
+    <a href="<?php echo esc_url($profile_url); ?>" class="team-member-link">
+        <?php 
+        // Display profile picture if available
+        if ($profile_picture) {
+            echo '<div class="profile-picture">';
+            echo '<img src="' . esc_url($profile_picture['url']) . '" alt="' . esc_attr($profile_picture['alt']) .'">';
+            echo '</div>';
+        }
+        ?>
+        <span class="team-member-name"><?php the_title(); ?></span>
+        <?php if ($position) : ?>
+            <p><?php echo esc_html($position); ?></p>
+        <?php endif; ?> 
+
+        <?php if ($linkedinProfile) : ?>
+            <a href="<?php echo esc_url($linkedinProfile); ?>" target="_blank" rel="noopener noreferrer">
+                <img style="height: 50px; width: 50px" src="<?php echo get_stylesheet_directory_uri(); ?>/images/linkedin.svg" alt="LinkedIn Profile" class="linkedin-icon"> 
+            </a>
+                <?php endif; ?>
+                </a>
+            </div>
+
                 <?php
             endwhile;
             wp_reset_postdata();
