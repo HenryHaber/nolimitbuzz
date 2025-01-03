@@ -1,0 +1,44 @@
+services:
+  - type: web
+    runtime: 'docker'
+    name: wordpress
+    buildCommand: "docker build -t wordpress ."
+    startCommand: "docker run -p 80:80 wordpress"
+    envVars:
+      - key: WORDPRESS_DB_HOST
+        fromDatabase:
+          name: mysql-db  # Consistent naming
+          property: host
+      - key: WORDPRESS_DB_NAME
+        value: wordpress # Explicitly set the database name
+      - key: WORDPRESS_DB_USER
+        fromDatabase:
+          name: mysql-db  # Consistent naming
+          property: user
+      - key: WORDPRESS_DB_PASSWORD
+        fromDatabase:
+          name: mysql-db  # Consistent naming
+          property: password
+    disk:
+      name: wordpress-data
+      mountPath: /var/www/html
+      sizeGB: 10 # Adjust as needed
+
+  - type: pserv # Corrected database type
+    runtime: 'docker'
+    name: mysql-db # Consistent naming
+    plan: free # 'standard' is deprecated, use a specific plan
+    disk:
+      name: mysql-data # Recommended naming for clarity
+      mountPath: /var/lib/mysql  # Correct path
+      sizeGB: 10 
+    envVars: # Directly define environment variables for MySQL
+      - key: MYSQL_ROOT_PASSWORD
+        generateValue: true
+      - key: MYSQL_DATABASE
+        value: wordpress # Ensure database name matches WordPress config
+      - key: MYSQL_USER
+        value: wordpress_user #  More descriptive username
+      - key: MYSQL_PASSWORD
+        generateValue: true
+
